@@ -47,3 +47,5 @@ notes.md
 design.md
 
 .pnpm-store/
+
+src/infrastructure/internal/database/migrations
