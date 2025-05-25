@@ -48,4 +48,4 @@ design.md
 
 .pnpm-store/
 
-src/infrastructure/internal/database/migrations
+src/infrastructure/internal/database/migrations/*

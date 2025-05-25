@@ -23,6 +23,10 @@ export const BREAK_PERIOD_RESOURCE = "Break Period";
 export const TIMETABLE_RESOURCE = "Timetable";
 export const PERIOD_RESOURCE = "Period";
 export const ROLE_RESOURCE = "Role";
+export const SCHEME_ENTRY_RESOURCE = "Scheme Entry";
+export const SCHEME_ENTRY_CONTENT_RESOURCE = "Scheme Entry Content";
+export const SCHEME_ENTRY_ASSIGNMENT_RESOURCE = "Scheme Entry Assignment";
+export const SCHEME_OF_WORK_RESOURCE = "Scheme of Work";
 /** <---------------> Success Responses <---------------> */
 export const ACCOUNT_CREATED = "Account Created Successfully";
 export const TOKEN_VERIFIED = "Token Verification Success";

@@ -53,6 +53,10 @@ model Tenant {
   BreakPeriod      BreakPeriod[]
   Timetable        Timetable[]
   Period           Period[]
+  SchemeOfWork     SchemeOfWork[]
+  SchemeEntry      SchemeEntry[]
+  SchemeEntryContent SchemeEntryContent[]
+  SchemaEntryAssignment SchemaEntryAssignment[]
 }
 
 enum TenantOnboardingStatusType {
@@ -344,6 +348,98 @@ model Permission {
 
 // ==================== ROLES AND PERMISSIONS TABLES END ==================== //
 
+
+// ==================== LESSON PLANNING TABLES START ======================== //
+
+model SchemeOfWork {
+  id          Int      @id @default(autoincrement())
+  subjectId   Int
+  staffId     Int
+  classId     Int
+  termId      Int
+  status      SchemeStatus    @default(DRAFT)
+  approvedBy  Int?
+  approvedAt  DateTime?  
+  calendarId  String 
+  entries     SchemeEntry[]
+  notes       String?
+  tenantId    Int
+  tenant      Tenant @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum SchemeStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+// TODO: Add this back in when we have exams
+// model SchemeExam {
+//   id          Int      @id @default(autoincrement())
+//   schemeOfWorkId Int @unique
+//   schemeOfWork  SchemeOfWork @relation(fields: [schemeOfWorkId], references: [id])
+//   createdAt     DateTime    @default(now())
+// }
+
+model SchemeEntry {
+  id          Int      @id @default(autoincrement())
+  week        Int
+  theme       String
+  topics      Json
+  objectives  Json
+  resources   Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenantId    Int
+  tenant      Tenant @relation(fields: [tenantId], references: [id])
+  schemeOfWorkId Int
+  schemeOfWork SchemeOfWork @relation(fields: [schemeOfWorkId], references: [id])
+  schemeEntryContent SchemeEntryContent[]
+  schemaEntryAssignments SchemaEntryAssignment[]
+}
+
+model SchemeEntryContent {
+  id            Int          @id @default(autoincrement())
+  title         String
+  contentType   ContentType
+  fileUrl       String?
+  description   String?
+  order         Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  schemeEntryId Int
+  schemeEntry   SchemeEntry  @relation(fields: [schemeEntryId], references: [id])
+  tenantId      Int
+  tenant        Tenant @relation(fields: [tenantId], references: [id])
+}
+
+enum ContentType {
+  VIDEO
+  SLIDE
+  PDF
+  TEXT
+}
+
+model SchemaEntryAssignment {
+  id             Int                @id @default(autoincrement())
+  title          String
+  description    String?
+  dueDate        DateTime?
+  resources      Json
+  order          Int?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  schemaEntryId  Int
+  schemaEntry    SchemeEntry        @relation(fields: [schemaEntryId], references: [id])
+  tenantId       Int
+  tenant         Tenant @relation(fields: [tenantId], references: [id])
+}
+
+// ====================== LESSON PLANNING TABLES END ========================= //
+
 // ==================== NOT IN USE YET ==================== //
 model StudentGroup {
   id       Int       @id @unique @default(autoincrement())
@@ -402,3 +498,4 @@ model Group {
 }
 
 // ===================== UNDECIDED TABLES END ===================== //
+
